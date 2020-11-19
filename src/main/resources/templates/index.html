@@ -7,6 +7,10 @@
 <body>
 <div th:align="center">
     <h1>Product Manager</h1>
+    <form action="#" th:action="@{/search}" method="get">
+        <input type="text" name="keyword">
+        <button type="submit">Search</button>
+    </form>
     <a href="/new">Create New Product</a>
     <br/><br/>
     <table th:border="1" th:cellpadding="10">

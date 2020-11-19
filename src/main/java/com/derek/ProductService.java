@@ -25,4 +25,8 @@ public class ProductService {
     public void delete(Long id){
         repo.deleteById(id);
     }
+
+    public List<Product> search(String keyword){
+        return repo.search(keyword);
+    }
 }
