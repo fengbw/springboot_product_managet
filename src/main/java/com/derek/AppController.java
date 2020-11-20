@@ -1,6 +1,8 @@
 package com.derek;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +17,27 @@ public class AppController {
 
     @RequestMapping("/")
     public String viewHomePage(Model model){
-        List<Product> listProducts = service.listAll();
+        return listByPage(model, 1, "name", "asc");
+    }
+
+    @RequestMapping("/page/{pageNumber}")
+    public String listByPage(Model model, @PathVariable("pageNumber") int currentPage,
+                             @Param("sortField") String sortField,
+                             @Param("sortDir") String sortDir){
+        Page<Product> page = service.listAll(currentPage, sortField, sortDir);
+        Long totalItems = page.getTotalElements();
+        int totalPages = page.getTotalPages();
+
+        List<Product> listProducts = page.getContent();
+
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("listProducts", listProducts);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        String reverseSortDir = sortDir.equals("asc") ? "des" : "asc";
+        model.addAttribute("reverseSortDir", reverseSortDir);
         return "index";
     }
 

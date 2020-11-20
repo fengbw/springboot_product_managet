@@ -13,10 +13,13 @@
     </form>
     <a href="/new">Create New Product</a>
     <br/><br/>
+    <div>
     <table th:border="1" th:cellpadding="10">
         <thead>
         <tr>
-            <th>Product Id</th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}">Product Id</a>
+            </th>
             <th>Name</th>
             <th>Brand</th>
             <th>Made In</th>
@@ -39,6 +42,29 @@
         </tr>
         </tbody>
     </table>
+    </div>
+    <div>&nbsp;</div>
+    <div>
+        Total Items: [[${totalItems}]] - Page [[${currentPage}]] of [[${totalPages}]]
+        &nbsp; - &nbsp;
+        <a th:if="${currentPage > 1}" th:href="@{/page/1}">First</a>
+        <span th:unless="${currentPage > 1}">First</span>
+        &nbsp;
+        <a th:if="${currentPage > 1}" th:href="@{'/page/' + ${currentPage - 1}}">Previous</a>
+        <span th:unless="${currentPage > 1}">Previous</span>
+        &nbsp;&nbsp;
+        <span th:each="i:${#numbers.sequence(1, totalPages)}">
+            <a th:if="${i != currentPage}" th:href="@{'/page/' + ${i}}">[[${i}]]</a>
+            <span th:unless="${i != currentPage}">[[${i}]]</span>
+            &nbsp;&nbsp;
+        </span>
+        <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}}">Next</a>
+        <span th:unless="${currentPage < totalPages}">Next</span>
+        &nbsp;
+        <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}}">Last</a>
+        <span th:unless="${currentPage < totalPages}">Last</span>
+        &nbsp;
+    </div>
 </div>
 </body>
 </html>
